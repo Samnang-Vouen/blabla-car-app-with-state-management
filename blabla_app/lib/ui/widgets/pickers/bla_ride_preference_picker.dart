@@ -9,7 +9,7 @@ import '../../../utils/animations_util.dart';
 import '../../../utils/date_time_utils.dart';
 import '../../theme/theme.dart';
 import '../buttons/bla_icon_button.dart';
-import 'bla_location_picker.dart';
+import 'location/bla_location_picker.dart';
 import 'bla_seat_picker.dart';
 
 ///

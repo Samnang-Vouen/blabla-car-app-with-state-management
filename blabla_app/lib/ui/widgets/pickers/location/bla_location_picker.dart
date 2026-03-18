@@ -1,9 +1,10 @@
-import 'package:blabla/services/location_service.dart';
+import 'package:blabla/data/repositories/location/location_repository.dart';
 import 'package:blabla/ui/widgets/display/bla_divider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../model/ride/locations.dart';
-import '../../theme/theme.dart';
+import '../../../../model/ride/locations.dart';
+import '../../../theme/theme.dart';
 
 ///
 /// A  Location Picker is a view to pick a Location:
@@ -19,6 +20,14 @@ class BlaLocationPicker extends StatefulWidget {
 
 class _BlaLocationPickerState extends State<BlaLocationPicker> {
   String currentSearchText = "";
+  List<Location> allLocations = [];
+
+  Future<void> loadLocations() async {
+    final locations = await context.read<LocationRepository>().getLocations();
+    setState(() {
+      allLocations = locations;
+    });
+  }
 
   void onTap(Location location) {
     Navigator.pop<Location>(context, location);
@@ -38,6 +47,8 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
         currentSearchText = widget.initLocation!.name;
       });
     }
+
+    loadLocations();
   }
 
   void onSearchChanged(String search) {
@@ -50,7 +61,7 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
     if (currentSearchText.length < 2) {
       return [];
     }
-    return LocationsService.availableLocations
+    return allLocations
         .where(
           (location) => location.name.toUpperCase().contains(
             currentSearchText.toUpperCase(),
